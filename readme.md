@@ -1,5 +1,5 @@
 # A styleguide for React
-This repo is a collection of (non-authoritative) React style conventions that I find to be useful, distilled from various sources on github and the web.
+This repo is a collection of (non-authoritative) React style conventions that I find to be useful, distilled from [various sources](##credits) on github and the web.
 
 PRs welcomed!
 
@@ -19,15 +19,22 @@ PRs welcomed!
 
 Order component methods based on the order of their life-cycle methods:
 ```
-React.createClass({  
-  displayName : '',
+React.createClass({
   propTypes: {},
   mixins : [],
-  getInitialState : function() {},
-  componentWillMount : function() {},
-  componentWillUnmount : function() {},
-  render : function() {}
-});
+
+  getInitialState: function() {},
+  getDefaultProps: function() {},
+
+  componentWillMount: function() {},
+  componentWillReceiveProps: function() {},
+  componentWillUnmount: function() {},
+
+  _customFunction: function() {},
+
+  render: function() {}
+
+})
 ```
 ___
 
@@ -98,7 +105,6 @@ return (
 ```
 return (<div><ComponentOne /><ComponentTwo /></div>);
 ```
-___
 ### Conditional JSX
 
 Ternaries are fine for simple use-cases:
@@ -134,7 +140,6 @@ return (
 ```
 buttonElement, formElement, tabElement
 ```
-
 
 ## List Iteration
 
