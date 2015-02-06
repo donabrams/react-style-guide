@@ -1,19 +1,19 @@
 # A styleguide for React
-This repo is a collection of (non-authoritative) React style conventions that I find to be useful, distilled from [various sources](##credits) on github and the web.
+This repo is a collection of (non-authoritative) React style conventions that I find to be useful, distilled from [various sources](#credits) on github and the web.
 
 PRs welcomed!
 
 
 ## Table of Contents
 
-* [Method Organization](##method-organization)
-* [JSX](##jsx)
-  * [Conditional JSX](###syntax)
+* [Method Organization](#method-organization)
+* [JSX](#jsx)
+  * [Conditional JSX](#conditional-jsx)
 * [List Iteration](#list-iteration)
 * [Forms](#forms)
 * [Formatting](#formatting)
-  * [Tags](##tags)
-  * [Component Attributes](##component-attributes)
+  * [Tags](#tags)
+  * [Component Attributes](#component-attributes)
 
 ## Method Organization
 
