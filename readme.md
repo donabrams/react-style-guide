@@ -30,8 +30,14 @@ React.createClass({
   componentWillReceiveProps: function() {},
   componentWillUnmount: function() {},
 
-  _customFunction: function() {},
+  // Begin custom methods
+  _customProcessMethods: function() {},
+ 
+  _customEventMethods: function() {},
+ 
+  _customRenderMethods: function() {},
 
+  // End with Render, so you can quickly locate/understand components elements
   render: function() {}
 
 })
@@ -40,15 +46,20 @@ ___
 
 Prefix custom functions with an underscore to distinguish between custom methods and methods which are part of React's API:  
 ```
-React.createClass({  
-  displayName : '',
+React.createClass({
   propTypes: {},
   mixins : [],
+  
   getInitialState : function() {},
   componentWillMount : function() {},
   componentWillUnmount : function() {},
+  
+  _computePrice : function() {},
+  
   _onChange : function() {},
-  _onCreate : function() {},
+  
+  _renderButtonGroup : function() {},
+  
   render : function() {}
 });
 
