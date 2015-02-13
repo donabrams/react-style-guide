@@ -1,5 +1,5 @@
 # A styleguide for React
-This repo is a collection of (non-authoritative) React style conventions that I find to be useful, distilled from [various sources](#credits) on github and the web.
+This repo is a collection of (non-authoritative) React style conventions and best practices that I find to be useful, distilled from [various sources](#credits) on github and the web.
 
 PRs welcomed!
 
@@ -225,10 +225,15 @@ If there are multiple component attributes, display them on newlines and indent 
 <Component attribute={...} anotherAttribute={...} attributeThree={...} />
 ```
 
+### Misc
+
+* Avoid placing state inside components if at all possible
+
+
 ## Credits
 
 * [React Style Guide, by David Chang](https://reactjsnews.com/react-style-guide-patterns-i-like/)  
 * [An opinionated guide to React.js best practices and conventions, by John Cobb](http://web-design-weekly.com/2015/01/29/opinionated-guide-react-js-best-practices-conventions/)  
 * [Khan React style guide](https://github.com/Khan/style-guides)  
 * [react guides](http://facebook.github.io/react/docs/getting-started.html)
-
+* [Writing good react components](http://blog.whn.se/post/69621609605/writing-good-react-components)
