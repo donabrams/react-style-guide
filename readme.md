@@ -6,7 +6,9 @@ PRs welcomed!
 
 ## Table of Contents
 
-* [Method Organization](#method-organization)
+* [Component Setup](#component-setup)
+  * [Component Naming](#component-naming)
+  * [Method Organization](#method-organization)
 * [JSX](#jsx)
   * [Conditional JSX](#conditional-jsx)
 * [List Iteration](#list-iteration)
@@ -15,40 +17,76 @@ PRs welcomed!
   * [Tags](#tags)
   * [Component Attributes](#component-attributes)
 
-## Method Organization
+## Component Setup
+
+### Component Naming
+
+Components should be assigned to variables whose name will be the components name used throughout the application.
+In JSX:
+```
+var Component = React.createClass({});
+```
+Compiles to:
+```
+var Component = React.createClass({displayName: "Component"});
+```
+___
+
+This helps with modulatity in your application - Export/Require (Component.jsx example):
+```
+var Component = React.createClass({});
+module.export = Component;
+```
+```
+define([],function(){
+  var Component = React.createClass({});
+  return Componenet
+});
+```
+
+### Method Organization
 
 Order component methods based on the order of their life-cycle methods:
 ```
-React.createClass({
+var Component = React.createClass({
   propTypes: {},
   mixins : [],
 
   getInitialState: function() {},
   getDefaultProps: function() {},
-
   componentWillMount: function() {},
   componentWillReceiveProps: function() {},
   componentWillUnmount: function() {},
 
-  _customFunction: function() {},
+  // Begin custom methods
+  _customProcessMethods: function() {},
+ 
+  _customEventMethods: function() {},
+ 
+  _customRenderMethods: function() {},
 
+  // End with render
+  // Locate quickly and understand components internal elements and structure
   render: function() {}
 
 })
 ```
 ___
 
-Prefix custom functions with an underscore to distinguish between custom methods and methods which are part of React's API:  
+Prefix custom functions with an underscore to distinguish between custom methods and methods which are part of React's API (example Component.jsx):  
 ```
-React.createClass({  
-  displayName : '',
+var Component = React.createClass({
   propTypes: {},
-  mixins : [],
-  getInitialState : function() {},
-  componentWillMount : function() {},
-  componentWillUnmount : function() {},
+  
+  getInitialState: function() {},
+  componentWillReceiveProps: function() {},
+  
+  _computePrice : function() {},
+  
   _onChange : function() {},
-  _onCreate : function() {},
+  
+  _renderButtonGroup : function() {},
+  
   render : function() {}
 });
 
