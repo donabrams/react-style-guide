@@ -1,8 +1,4 @@
-# A styleguide for React
-This repo is a collection of (non-authoritative) React style conventions and best practices that I find to be useful, distilled from [various sources](#credits) on github and the web.
-
-PRs welcomed!
-
+# Craftsy React Style Guide (WIP)
 
 ## Table of Contents
 
@@ -269,6 +265,8 @@ If there are multiple component attributes, display them on newlines and indent 
 
 
 ## Credits
+
+*Initially Forked from the [React Style Guide](https://github.com/DeepAnchor/react-style-guide). Thank you for starting DeepAnchor!*
 
 * [React Style Guide, by David Chang](https://reactjsnews.com/react-style-guide-patterns-i-like/)  
 * [An opinionated guide to React.js best practices and conventions, by John Cobb](http://web-design-weekly.com/2015/01/29/opinionated-guide-react-js-best-practices-conventions/)  
