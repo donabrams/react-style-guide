@@ -39,8 +39,8 @@ module.export = Component;
 ```
 ```
 define([],function(){
-var Component = React.createClass({});
-return Componenet
+  var Component = React.createClass({});
+  return Componenet
 });
 ```
 
