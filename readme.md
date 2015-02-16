@@ -6,7 +6,7 @@
   * [Component Naming](#component-naming)
   * [Method Organization](#method-organization)
   * [Formatting](#formatting)
-  * [Component Attributes(Props)](#component-attributes-props)
+  * [Component Attributes(Props)](#component-attributesprops)
 * [JSX](#jsx)
   * [Conditional JSX](#conditional-jsx)
   * [List Iteration](#list-iteration)
