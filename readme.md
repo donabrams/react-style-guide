@@ -5,13 +5,12 @@
 * [Component Setup](#component-setup)
   * [Component Naming](#component-naming)
   * [Method Organization](#method-organization)
+  * [Formatting](#formatting)
+  * [Component Attributes(Props)](#component-attributes-props)
 * [JSX](#jsx)
   * [Conditional JSX](#conditional-jsx)
-* [List Iteration](#list-iteration)
+  * [List Iteration](#list-iteration)
 * [Forms](#forms)
-* [Formatting](#formatting)
-  * [Tags](#tags)
-  * [Component Attributes](#component-attributes)
 
 ## Component Setup
 
@@ -91,8 +90,50 @@ var Component = React.createClass({
 *Note:
 Keep the render functions at the bottom of your component declarations. This way, you can always expect to find it in the same place.*
 
-___
 
+### Formatting
+
+```
+// Childless components should close themselves
+<childless />
+
+// Components with children should have closing tags
+<with-children></with-children>
+```  
+
+
+### Component Attributes(Props)
+
+***Discuss***
+Always pass specifically need/required props and not all props to components/sub-components:
+**bad**
+```
+<SubComponent {...this.props} />
+```
+
+**good**
+```
+<SubComponent theData={this.props.theData} />
+```
+
+***Discuss***
+If there are multiple component attributes, display them on newlines and indent them instead of keeping them in-line: 
+
+**good**
+```
+<Component
+        attribute={...}
+        anotherAttribute={...}
+        attributeThree={...}
+        …
+/>
+```
+**bad**
+```
+<Component attribute={...} anotherAttribute={...} attributeThree={...} />
+```
+
+___
 Set propTypes for validation and self-documentation:
 ```
 propTypes: {
@@ -159,7 +200,7 @@ return (
 optionalButtonElement, optionalFormElement, optionalTabElement
 ```
 
-## List Iteration
+### List Iteration
 
 Create lists outside of the returned render and always assign a unique key:
 
@@ -196,43 +237,7 @@ function(event) {
 }
 ```
 
-
-
-
-## Formatting
-
-### Tags
-
-Childless components should close themselves:
-```
-<childless />
-```  
-
-Components with children should have closing tags:
-```
-<with-children></with-children>
-```
-
-### Component Attributes
-
-***Discuss***
-If there are multiple component attributes, display them on newlines and indent them instead of keeping them in-line: 
-
-**good**
-```
-<Component
-        attribute={...}
-        anotherAttribute={...}
-        attributeThree={...}
-        …
-/>
-```
-**bad**
-```
-<Component attribute={...} anotherAttribute={...} attributeThree={...} />
-```
-
-### Misc
+## Misc
 
 * Avoid placing state inside components if at all possible
 
