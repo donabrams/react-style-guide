@@ -107,23 +107,6 @@ propTypes: {
 
 ## JSX
 
-Wrap JSX that spans multiple lines in parentheses:
-```
-var multilineJsx = (  
-  <header>
-    <Logo />
-    <Nav />
-  </header>
-);
-```
-
-Disregard parentheses for JSX spanning a single line:
-
-```
-var singleLineJsx = <h1>Simple JSX</h1>;  
-```
-___
-
 Keep indenting consistent for JSX which contains nested elements across multiple lines, no matter how few elements are returned. This helps preserve readability:
 
 **good**
@@ -149,6 +132,7 @@ Ternaries are fine for simple use-cases:
 ```
 ___
 
+***Discuss***
 When the element returned by `render` depends on state, props, or other conditions, declare it at the top of the render function: 
 either the element will be rendered, or it won't be.
 
@@ -169,38 +153,26 @@ return (
 
 ```
 
-*Note: It's can be useful to keep a consistent suffix on these variables so they are easily identifiable:*
+*Note: It can be useful to keep a consistent suffix on these variables so they are easily identifiable:*
 
 ```
-buttonElement, formElement, tabElement
+optionalButtonElement, optionalFormElement, optionalTabElement
 ```
 
 ## List Iteration
 
-For simple use-cases, list iterations can be done in-line inside `render`. This can aid in keeping code clean and terse:
+Create lists outside of the returned render and always assign a unique key:
 
 ```
+var renderList = this.props.list.map(function(data, i) {
+        return (<Component data={data} key={i} />)
+ })
+
 return (
     <div>
-        {this.props.list.map(function(data, i) {
-            return (<Component data={data} key={i} />)
-        })}
+        {renderList}
     </div>
 );
-```
-
-More complex logic can be kept outside of the return statement.
-
-
-*Note: ES6 users can make use of the fat arrow to further simplify things:* 
-
-```
-return (
-    <div>
-        { this.props.list.map( (data, i) => <Component data={data} key={i} /> }
-    </div>
-);
-
 ```
 
 ## Forms
@@ -243,6 +215,7 @@ Components with children should have closing tags:
 
 ### Component Attributes
 
+***Discuss***
 If there are multiple component attributes, display them on newlines and indent them instead of keeping them in-line: 
 
 **good**
