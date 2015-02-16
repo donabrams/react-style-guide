@@ -106,6 +106,7 @@ Keep the render functions at the bottom of your component declarations. This way
 
 ***Discuss***
 Always pass specifically need/required props and not all props to components/sub-components:
+
 **bad**
 ```
 <SubComponent {...this.props} />
