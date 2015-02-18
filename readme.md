@@ -139,6 +139,7 @@ Set propTypes for validation and self-documentation:
 ```
 propTypes: {
         arrayProp: React.PropTypes.array,
+        arrayOfProps: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
         boolProp: React.PropTypes.bool,
         funcProp: React.PropTypes.func,
         numProp: React.PropTypes.number,
@@ -203,18 +204,23 @@ optionalButtonElement, optionalFormElement, optionalTabElement
 
 ### List Iteration
 
+***Discuss*** 
 Create lists outside of the returned render and always assign a unique key:
 
 ```
-var renderList = this.props.list.map(function(data, i) {
-        return (<Component data={data} key={i} />)
- })
+_renderListItem: function(item) {
+  return (<Component data={data} key={i} />);
+},
 
-return (
-    <div>
-        {renderList}
-    </div>
-);
+render: function() {
+  var renderedList = this.props.list.map(this._renderListItem)
+
+  return (
+      <div>
+          {renderedList}
+      </div>
+  );
+}
 ```
 
 ## Forms
