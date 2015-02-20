@@ -101,7 +101,7 @@ Keep the render functions at the bottom of your component declarations. This way
 <childless />
 
 // Components with children should have closing tags
-<with-children></with-children>
+<with-children><child/></with-children>
 ```  
 
 
