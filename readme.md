@@ -213,11 +213,9 @@ _renderListItem: function(item) {
 },
 
 render: function() {
-  var renderedList = this.props.list.map(this._renderListItem)
-
   return (
       <div>
-          {renderedList}
+          {this.props.list.map(this._renderListItem)}
       </div>
   );
 }
