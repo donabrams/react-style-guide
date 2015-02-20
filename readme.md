@@ -7,6 +7,8 @@
   * [Method Organization](#method-organization)
   * [Formatting](#formatting)
   * [Component Attributes(Props)](#component-attributesprops)
+    * [Passing Properties](#passing-properties)
+    * [Assigning Properties](#assigning-properties)
 * [JSX](#jsx)
   * [Conditional JSX](#conditional-jsx)
   * [List Iteration](#list-iteration)
@@ -54,7 +56,8 @@ var Component = React.createClass({
   componentWillUnmount: function() {},
 
   // Begin custom methods
-  _customProcessMethods: function() {},
+  _customHelperMethods: function() {},
+  _customDerivedPropertiesMethods: function() {},
  
   _customEventMethods: function() {},
  
@@ -104,7 +107,8 @@ Keep the render functions at the bottom of your component declarations. This way
 
 ### Component Attributes(Props)
 
-***Discuss***
+##### Passing Properties
+
 Always pass specifically need/required props and not all props to components/sub-components:
 
 **bad**
@@ -115,23 +119,28 @@ Always pass specifically need/required props and not all props to components/sub
 **good**
 ```
 <SubComponent theData={this.props.theData} />
+
+<SubComponent theData={...this.props.theData} />
 ```
 
-***Discuss***
+##### Assigning Properties
 If there are multiple component attributes, display them on newlines and indent them instead of keeping them in-line: 
+
+**bad**
+```
+<Component attribute={...} anotherAttribute={...} attributeThree={...} attributeFour={...} attributeFive={...} attributeSix={...} attributeSeven={...}/>
+```
 
 **good**
 ```
-<Component
-        attribute={...}
+<Component attribute={...}
         anotherAttribute={...}
         attributeThree={...}
-        …
+        attributeFour={...}
+        attributeFive={...}
+        attributeSix={...}
+        attributeSeven={...}
 />
-```
-**bad**
-```
-<Component attribute={...} anotherAttribute={...} attributeThree={...} />
 ```
 
 ___
@@ -169,13 +178,11 @@ return (<div><ComponentOne /><ComponentTwo /></div>);
 
 Ternaries are fine for simple use-cases:
 ```
-{this.state.show && 'This is Shown'}
 {this.state.on ? ‘On’ : ‘Off’}
 
 ```
 ___
 
-***Discuss***
 When the element returned by `render` depends on state, props, or other conditions, declare it at the top of the render function: 
 either the element will be rendered, or it won't be.
 
@@ -204,8 +211,8 @@ optionalButtonElement, optionalFormElement, optionalTabElement
 
 ### List Iteration
 
-***Discuss*** 
-Create lists outside of the returned render and always assign a unique key:
+
+Create lists inline with map calling a render method and always assign a unique key:
 
 ```
 _renderListItem: function(item) {
