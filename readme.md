@@ -209,7 +209,7 @@ Create lists outside of the returned render and always assign a unique key:
 
 ```
 _renderListItem: function(item) {
-  return (<Component data={data} key={i} />);
+  return (<Component data={item.data} key={item.key} />);
 },
 
 render: function() {
