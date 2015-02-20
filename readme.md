@@ -183,7 +183,7 @@ propTypes: {
 
 ## JSX
 
-Keep indenting consistent for JSX which contains nested elements across multiple lines, no matter how few elements are returned. Always use enclosing parens aournd JSX blocks. This helps preserve readability:
+Keep indenting consistent for JSX which contains nested elements across multiple lines, no matter how few elements are returned. Always use enclosing parens around JSX blocks. This helps preserve readability:
 
 **bad**
 ```
@@ -237,8 +237,8 @@ ___
 
 Do NOT use &&. 
 
+**bad**
 ```
-//BAD
 return (
     <div>
         …
@@ -320,7 +320,7 @@ Given this:
   },
   ...
 ```
-Bad:
+**bad**
 ```
   render: function() {
       return (
@@ -333,7 +333,7 @@ Bad:
       );
   }
 ```
-Good:
+**good**
 ```
   _shortTitle: function() {
       return title.substr(0,20);
@@ -363,9 +363,11 @@ When binding functions inside a collection, bind to the key instead of the data 
 
 React will currently override event handler binds to bind to this. This practice will stop in React 13, so you should explicitly bind to this from now on.
 
+Don't use data- and dataset in event handlers/binds. It's terribly slow and non-reacty.
+
 Avoid using the event object in event handlers unless you need something on the event object. If you need to call event.preventDefault(), use a prevent default wrapping utility function.
 
-BAD:
+**bad**
 ```
   ...
   _doSomething: function(event) {
@@ -381,7 +383,7 @@ BAD:
 
 ```
 
-GOOD:
+**good**
 ```
   ...
   _preventDefault: function(handler) {
@@ -402,6 +404,8 @@ GOOD:
 ```
 
 Note: event.stopPropagation could be wrapped similarly. These wrapping functions should probably go into some mixin.
+
+Don't use varargs in event handlers. The event object will get appended to arguments when bind is used.
 
 ## Mixins
 
