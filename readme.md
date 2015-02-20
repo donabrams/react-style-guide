@@ -305,7 +305,7 @@ State should:
 * be kept as high up in the component hierarchy as reasonable
 * never be duplicated or kept "in sync" between siblings
 
-Derived properties should be moved into a component method (and memoized if needed/possible).
+Derived properties should be moved into a component method.
 
 Given this:
 ```
@@ -355,7 +355,7 @@ Good:
   }
 ```
 
-Note: Memoization is only practical with immutable objects and arrays. Immutability is recommended.
+Derived properties can/should be memoized with an important caveat: Memoization is only practical with immutable objects and arrays. Immutability is recommended in general.
 
 
 ## Credits
