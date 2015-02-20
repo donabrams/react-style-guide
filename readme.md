@@ -294,29 +294,28 @@ function(event) {
 
 Props are:
 
-* Never modified by the component itself (directly)
-* Are set and modified by the parent
+* never modified by the component itself (directly)
+* set and modified by the parent
 
-State is:
+State should:
 
-* Set by the component
-* Never set by an external source
-* Never determined by props (exception: if a prop is explicitly an initial state i.e. ```<Foo initialCount=3/>```)
-* Should be kept as high up in the component hierarchy as reasonable
-* Never duplicated or kept "in sync" among siblings.
+* be set by the component
+* never set by an external source
+* only be determined by props if a prop is explicitly an initial state i.e. ```<Foo initialCount=3/>```
+* be kept as high up in the component hierarchy as reasonable
+* never be duplicated or kept "in sync" between siblings
 
 Derived properties should be moved into a component method (and memoized if needed/possible).
 
 Given this:
 ```
   propTypes: {
-      initialList: React.PropTypes.arrayOf(React.PropTypes.string).required
+      myList: React.PropTypes.arrayOf(React.PropTypes.string).required
   },
   getInitialState: function() {
       return {
           title: 'WAT',
-          filterString: '',
-          myList: this.props.initialList.slice(0);
+          filterString: ''
       }
   },
   ...
@@ -327,7 +326,7 @@ Bad:
       return (
           <h1> { title.substr(0,20) } </h1>
           <ul>
-            { this.state.myList.filter(function(item) { return item.matches(this.state.filterString); }).map(function(item) {
+            { this.props.myList.filter(function(item) { return item.matches(this.state.filterString); }).map(function(item) {
               <li>{ item }</li>
             })}
           </ul>
@@ -340,7 +339,7 @@ Good:
       return title.substr(0,20);
   },
   _filteredList: function() {
-      return this.state.myList.filter(function(item) { 
+      return this.props.myList.filter(function(item) { 
              return item.matches(this.state.filterString); 
           });
   },
