@@ -120,7 +120,7 @@ Always pass specifically need/required props and not all props to components/sub
 ```
 <SubComponent theData={this.props.theData} />
 
-<SubComponent theData={...this.props.theData} />
+<SubComponent {...this.props.theData} />
 ```
 
 ##### Assigning Properties
