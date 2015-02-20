@@ -1,21 +1,18 @@
-# A styleguide for React
-This repo is a collection of (non-authoritative) React style conventions and best practices that I find to be useful, distilled from [various sources](#credits) on github and the web.
-
-PRs welcomed!
-
+# Craftsy React Style Guide (WIP)
 
 ## Table of Contents
 
 * [Component Setup](#component-setup)
   * [Component Naming](#component-naming)
   * [Method Organization](#method-organization)
+  * [Formatting](#formatting)
+  * [Component Attributes(Props)](#component-attributesprops)
+    * [Passing Properties](#passing-properties)
+    * [Assigning Properties](#assigning-properties)
 * [JSX](#jsx)
   * [Conditional JSX](#conditional-jsx)
-* [List Iteration](#list-iteration)
+  * [List Iteration](#list-iteration)
 * [Forms](#forms)
-* [Formatting](#formatting)
-  * [Tags](#tags)
-  * [Component Attributes](#component-attributes)
 
 ## Component Setup
 
@@ -59,7 +56,8 @@ var Component = React.createClass({
   componentWillUnmount: function() {},
 
   // Begin custom methods
-  _customProcessMethods: function() {},
+  _customHelperMethods: function() {},
+  _customDerivedPropertiesMethods: function() {},
  
   _customEventMethods: function() {},
  
@@ -95,12 +93,62 @@ var Component = React.createClass({
 *Note:
 Keep the render functions at the bottom of your component declarations. This way, you can always expect to find it in the same place.*
 
-___
 
+### Formatting
+
+```
+// Childless components should close themselves
+<childless />
+
+// Components with children should have closing tags
+<with-children></with-children>
+```  
+
+
+### Component Attributes(Props)
+
+##### Passing Properties
+
+Always pass specifically need/required props and not all props to components/sub-components:
+
+**bad**
+```
+<SubComponent {...this.props} />
+```
+
+**good**
+```
+<SubComponent theData={this.props.theData} />
+
+<SubComponent theData={...this.props.theData} />
+```
+
+##### Assigning Properties
+If there are multiple component attributes, display them on newlines and indent them instead of keeping them in-line: 
+
+**bad**
+```
+<Component attribute={...} anotherAttribute={...} attributeThree={...} attributeFour={...} attributeFive={...} attributeSix={...} attributeSeven={...}/>
+```
+
+**good**
+```
+<Component attribute={...}
+        anotherAttribute={...}
+        attributeThree={...}
+        attributeFour={...}
+        attributeFive={...}
+        attributeSix={...}
+        attributeSeven={...}
+/>
+```
+
+___
 Set propTypes for validation and self-documentation:
 ```
 propTypes: {
         arrayProp: React.PropTypes.array,
+        arrayOfProps: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
         boolProp: React.PropTypes.bool,
         funcProp: React.PropTypes.func,
         numProp: React.PropTypes.number,
@@ -111,24 +159,12 @@ propTypes: {
 
 ## JSX
 
-Wrap JSX that spans multiple lines in parentheses:
-```
-var multilineJsx = (  
-  <header>
-    <Logo />
-    <Nav />
-  </header>
-);
-```
-
-Disregard parentheses for JSX spanning a single line:
-
-```
-var singleLineJsx = <h1>Simple JSX</h1>;  
-```
-___
-
 Keep indenting consistent for JSX which contains nested elements across multiple lines, no matter how few elements are returned. This helps preserve readability:
+
+**bad**
+```
+return (<div><ComponentOne /><ComponentTwo /></div>);
+```
 
 **good**
 ```
@@ -139,15 +175,10 @@ return (
     </div>
 );
 ```
-**bad**
-```
-return (<div><ComponentOne /><ComponentTwo /></div>);
-```
 ### Conditional JSX
 
 Ternaries are fine for simple use-cases:
 ```
-{this.state.show && 'This is Shown'}
 {this.state.on ? ‘On’ : ‘Off’}
 
 ```
@@ -173,38 +204,29 @@ return (
 
 ```
 
-*Note: It's can be useful to keep a consistent suffix on these variables so they are easily identifiable:*
+*Note: It can be useful to keep a consistent suffix on these variables so they are easily identifiable:*
 
 ```
-buttonElement, formElement, tabElement
+optionalButtonElement, optionalFormElement, optionalTabElement
 ```
 
-## List Iteration
-
-For simple use-cases, list iterations can be done in-line inside `render`. This can aid in keeping code clean and terse:
-
-```
-return (
-    <div>
-        {this.props.list.map(function(data, i) {
-            return (<Component data={data} key={i} />)
-        })}
-    </div>
-);
-```
-
-More complex logic can be kept outside of the return statement.
+### List Iteration
 
 
-*Note: ES6 users can make use of the fat arrow to further simplify things:* 
+Create lists inline with map calling a render method and always assign a unique key:
 
 ```
-return (
-    <div>
-        { this.props.list.map( (data, i) => <Component data={data} key={i} /> }
-    </div>
-);
+_renderListItem: function(item) {
+  return (<Component data={item.data} key={item.key} />);
+},
 
+render: function() {
+  return (
+      <div>
+          {this.props.list.map(this._renderListItem)}
+      </div>
+  );
+}
 ```
 
 ## Forms
@@ -228,47 +250,14 @@ function(event) {
 }
 ```
 
-
-
-
-## Formatting
-
-### Tags
-
-Childless components should close themselves:
-```
-<childless />
-```  
-
-Components with children should have closing tags:
-```
-<with-children></with-children>
-```
-
-### Component Attributes
-
-If there are multiple component attributes, display them on newlines and indent them instead of keeping them in-line: 
-
-**good**
-```
-<Component
-        attribute={...}
-        anotherAttribute={...}
-        attributeThree={...}
-        …
-/>
-```
-**bad**
-```
-<Component attribute={...} anotherAttribute={...} attributeThree={...} />
-```
-
-### Misc
+## Misc
 
 * Avoid placing state inside components if at all possible
 
 
 ## Credits
+
+*Initially Forked from the [React Style Guide](https://github.com/DeepAnchor/react-style-guide). Thank you for starting DeepAnchor!*
 
 * [React Style Guide, by David Chang](https://reactjsnews.com/react-style-guide-patterns-i-like/)  
 * [An opinionated guide to React.js best practices and conventions, by John Cobb](http://web-design-weekly.com/2015/01/29/opinionated-guide-react-js-best-practices-conventions/)  
