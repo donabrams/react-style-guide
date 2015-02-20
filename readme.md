@@ -183,11 +183,11 @@ propTypes: {
 
 ## JSX
 
-Keep indenting consistent for JSX which contains nested elements across multiple lines, no matter how few elements are returned. This helps preserve readability:
+Keep indenting consistent for JSX which contains nested elements across multiple lines, no matter how few elements are returned. Always use enclosing parens aournd JSX blocks. This helps preserve readability:
 
 **bad**
 ```
-return (<div><ComponentOne /><ComponentTwo /></div>);
+return <div><ComponentOne /><ComponentTwo /></div>;
 ```
 
 **good**
@@ -201,14 +201,14 @@ return (
 ```
 ### Conditional JSX
 
-Ternaries are fine for simple use-cases:
+Ternaries are fine as long as they fit on one line without scrolling:
 ```
 {this.state.on ? ‘On’ : ‘Off’}
 
 ```
 ___
 
-When the element returned by `render` depends on state, props, or other conditions, declare it at the top of the render function: 
+When an element returned by `render` depends on state, props, or other conditions, declare it in a var at the top of the render function: 
 either the element will be rendered, or it won't be.
 
 ```
@@ -228,20 +228,36 @@ return (
 
 ```
 
-*Note: It can be useful to keep a consistent suffix on these variables so they are easily identifiable:*
+It can be useful to keep a consistent suffix on these variables so they are easily identifiable:*
 
 ```
 optionalButtonElement, optionalFormElement, optionalTabElement
+```
+___
+
+Do NOT use &&. 
+
+```
+//BAD
+return (
+    <div>
+        …
+        {this.props.condition && (<div> … </div>)}
+        …
+    </div>
+);
+
 ```
 
 ### List Iteration
 
 
-Create lists inline with map calling a render method and always assign a unique key:
+Create lists inline with map calling a render method and ALWAYS assign a unique key:
 
 ```
 _renderListItem: function(item) {
-  return (<Component data={item.data} key={item.key} />);
+  // Keep the key as the first attribute so it's readily identifiable.
+  return (<Component key={item.key} data={item.data} />);
 },
 
 render: function() {
@@ -274,9 +290,73 @@ function(event) {
 }
 ```
 
-## Misc
+## State vs. Props
 
-* Avoid placing state inside components if at all possible
+Props are:
+
+* Never modified by the component itself (directly)
+* Are set and modified by the parent
+
+State is:
+
+* Set by the component
+* Never set by an external source
+* Never determined by props (exception: if a prop is explicitly an initial state i.e. ```<Foo initialCount=3/>```)
+* Should be kept as high up in the component hierarchy as reasonable
+* Never duplicated or kept "in sync" among siblings.
+
+Derived properties should be moved into a component method (and memoized if needed/possible).
+
+Given this:
+```
+  propTypes: {
+      initialList: React.PropTypes.arrayOf(React.PropTypes.string).required
+  },
+  getInitialState: function() {
+      return {
+          title: 'WAT',
+          filterString: '',
+          myList: this.props.initialList.slice(0);
+      }
+  },
+  ...
+```
+Bad:
+```
+  render: function() {
+      return (
+          <h1> { title.substr(0,20) } </h1>
+          <ul>
+            { this.state.myList.filter(function(item) { return item.matches(this.state.filterString); }).map(function(item) {
+              <li>{ item }</li>
+            })}
+          </ul>
+      );
+  }
+```
+Good:
+```
+  _shortTitle: function() {
+      return title.substr(0,20);
+  },
+  _filteredList: function() {
+      return this.state.myList.filter(function(item) { 
+             return item.matches(this.state.filterString); 
+          });
+  },
+  render: function() {
+      return (
+          <h1>{ _shortTitle() }</h1>
+          <ul>
+            { this._filteredList().map(function(item) {
+              <li>{ item }</li>
+            })}
+          </ul>
+      );
+  }
+```
+
+Note: Memoization is only practical with immutable objects and arrays. Immutability is recommended.
 
 
 ## Credits
