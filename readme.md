@@ -144,16 +144,40 @@ If there are multiple component attributes, display them on newlines and indent 
 ```
 
 ___
-Set propTypes for validation and self-documentation:
+Set propTypes for validation and self-documentation, required first:
 ```
 propTypes: {
-        arrayProp: React.PropTypes.array,
         arrayOfProps: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
+        arrayProp: React.PropTypes.array,
         boolProp: React.PropTypes.bool,
         funcProp: React.PropTypes.func,
         numProp: React.PropTypes.number,
         objProp: React.PropTypes.object,
-        stringProp: React.PropTypes.string,
+        stringProp: React.PropTypes.string
+    }
+```
+
+Avoid using React.PropTypes.object and React.PropTypes.array if you can be more explicit:
+```
+propTypes: {
+        message: React.PropTypes.instanceOf(Message),
+        someView: React.PropTypes.shape({
+                numProp: React.PropTypes.number.isRequired,
+                funcProp: React.PropTypes.func
+            }),
+        optionalUnion: React.PropTypes.oneOfType([
+                React.PropTypes.string,
+                React.PropTypes.number
+            ]).isRequired,
+        arrayOfProps: React.PropTypes.arrayOf(React.PropTypes.shape({
+                arrayProp: React.PropTypes.array,
+                boolProp: React.PropTypes.bool,
+            })),
+        customProp: function(props, propName, componentName) {
+          if (!/matchme/.test(props[propName])) {
+            return new Error('Validation failed!');
+          }
+        }
     }
 ```
 
