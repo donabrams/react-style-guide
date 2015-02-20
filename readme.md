@@ -357,6 +357,57 @@ Good:
 
 Derived properties can/should be memoized with an important caveat: Memoization is only practical with immutable objects and arrays. Immutability is recommended in general.
 
+## Binding Event Handlers
+
+When binding functions inside a collection, bind to the key instead of the data object itself. This helps keep logic out of the view.
+
+React will currently override event handler binds to bind to this. This practice will stop in React 13, so you should explicitly bind to this from now on.
+
+Avoid using the event object in event handlers unless you need something on the event object. If you need to call event.preventDefault(), use a prevent default wrapping utility function.
+
+BAD:
+```
+  ...
+  _doSomething: function(event) {
+      event.preventDefault();
+      var i = event.target.dataset.id;
+      ...
+  },
+  render: function() {
+      return this.props.sections.map(function(section, i) {(
+        <a key={ i } href="#" onClick={ _doSomething } data-id="i">{ section.label }</a>
+      )});
+  }
+
+```
+
+GOOD:
+```
+  ...
+  _preventDefault: function(handler) {
+      return function(event) {
+          event.preventDefault();
+          handler.call(this, event);
+      };
+  },
+  _doSomething: function(i) {
+      ...
+  },
+  render: function() {
+      return this.props.sections.map(function(section, i) {(
+        <a key={ i } href="#" onClick={ preventDefault( _doSomething.bind(this, i) }>{ section.label }</a>
+      )});
+  }
+
+```
+
+Note: event.stopPropagation could be wrapped similarly. These wrapping functions should probably go into some mixin.
+
+## Mixins
+
+Mixins provide additional functionality and help keep components DRY. However, they also "hide" code relevant to the component. 
+
+TODO:
 
 ## Credits
 
