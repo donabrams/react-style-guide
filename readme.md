@@ -161,6 +161,11 @@ propTypes: {
 
 Keep indenting consistent for JSX which contains nested elements across multiple lines, no matter how few elements are returned. This helps preserve readability:
 
+**bad**
+```
+return (<div><ComponentOne /><ComponentTwo /></div>);
+```
+
 **good**
 ```
 return (
@@ -169,10 +174,6 @@ return (
         <ComponentTwo />
     </div>
 );
-```
-**bad**
-```
-return (<div><ComponentOne /><ComponentTwo /></div>);
 ```
 ### Conditional JSX
 
