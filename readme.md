@@ -37,7 +37,7 @@ module.export = Component;
 ```
 define([],function(){
   var Component = React.createClass({});
-  return Componenet
+  return Component;
 });
 ```
 
@@ -101,7 +101,7 @@ Keep the render functions at the bottom of your component declarations. This way
 <childless />
 
 // Components with children should have closing tags
-<with-children></with-children>
+<with-children><child/></with-children>
 ```  
 
 
@@ -120,7 +120,7 @@ Always pass specifically need/required props and not all props to components/sub
 ```
 <SubComponent theData={this.props.theData} />
 
-<SubComponent theData={...this.props.theData} />
+<SubComponent {...this.props.theData} />
 ```
 
 ##### Assigning Properties
@@ -144,26 +144,50 @@ If there are multiple component attributes, display them on newlines and indent 
 ```
 
 ___
-Set propTypes for validation and self-documentation:
+Set propTypes for validation and self-documentation, required first:
 ```
 propTypes: {
-        arrayProp: React.PropTypes.array,
         arrayOfProps: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
+        arrayProp: React.PropTypes.array,
         boolProp: React.PropTypes.bool,
         funcProp: React.PropTypes.func,
         numProp: React.PropTypes.number,
         objProp: React.PropTypes.object,
-        stringProp: React.PropTypes.string,
+        stringProp: React.PropTypes.string
+    }
+```
+
+Avoid using React.PropTypes.object and React.PropTypes.array if you can be more explicit:
+```
+propTypes: {
+        message: React.PropTypes.instanceOf(Message),
+        someView: React.PropTypes.shape({
+                numProp: React.PropTypes.number.isRequired,
+                funcProp: React.PropTypes.func
+            }),
+        optionalUnion: React.PropTypes.oneOfType([
+                React.PropTypes.string,
+                React.PropTypes.number
+            ]).isRequired,
+        arrayOfProps: React.PropTypes.arrayOf(React.PropTypes.shape({
+                arrayProp: React.PropTypes.array,
+                boolProp: React.PropTypes.bool,
+            })),
+        customProp: function(props, propName, componentName) {
+          if (!/matchme/.test(props[propName])) {
+            return new Error('Validation failed!');
+          }
+        }
     }
 ```
 
 ## JSX
 
-Keep indenting consistent for JSX which contains nested elements across multiple lines, no matter how few elements are returned. This helps preserve readability:
+Keep indenting consistent for JSX which contains nested elements across multiple lines, no matter how few elements are returned. Always use enclosing parens around JSX blocks. This helps preserve readability:
 
 **bad**
 ```
-return (<div><ComponentOne /><ComponentTwo /></div>);
+return <div><ComponentOne /><ComponentTwo /></div>;
 ```
 
 **good**
@@ -177,14 +201,14 @@ return (
 ```
 ### Conditional JSX
 
-Ternaries are fine for simple use-cases:
+Ternaries are fine as long as they fit on one line without scrolling:
 ```
 {this.state.on ? ‘On’ : ‘Off’}
 
 ```
 ___
 
-When the element returned by `render` depends on state, props, or other conditions, declare it at the top of the render function: 
+When an element returned by `render` depends on state, props, or other conditions, declare it in a var at the top of the render function: 
 either the element will be rendered, or it won't be.
 
 ```
@@ -204,20 +228,36 @@ return (
 
 ```
 
-*Note: It can be useful to keep a consistent suffix on these variables so they are easily identifiable:*
+It can be useful to keep a consistent suffix on these variables so they are easily identifiable:*
 
 ```
 optionalButtonElement, optionalFormElement, optionalTabElement
+```
+___
+
+Do NOT use &&. 
+
+**bad**
+```
+return (
+    <div>
+        …
+        {this.props.condition && (<div> … </div>)}
+        …
+    </div>
+);
+
 ```
 
 ### List Iteration
 
 
-Create lists inline with map calling a render method and always assign a unique key:
+Create lists inline with map calling a render method and ALWAYS assign a unique key:
 
 ```
 _renderListItem: function(item) {
-  return (<Component data={item.data} key={item.key} />);
+  // Keep the key as the first attribute so it's readily identifiable.
+  return (<Component key={item.key} data={item.data} />);
 },
 
 render: function() {
@@ -250,10 +290,128 @@ function(event) {
 }
 ```
 
-## Misc
+## State vs. Props
 
-* Avoid placing state inside components if at all possible
+Props are:
 
+* never modified by the component itself (directly)
+* set and modified by the parent
+
+State should:
+
+* be set by the component
+* never set by an external source
+* only be determined by props if a prop is explicitly an initial state i.e. ```<Foo initialCount=3/>```
+* be kept as high up in the component hierarchy as reasonable
+* never be duplicated or kept "in sync" between siblings
+
+Derived properties should be moved into a component method.
+
+Given this:
+```
+  propTypes: {
+      myList: React.PropTypes.arrayOf(React.PropTypes.string).required
+  },
+  getInitialState: function() {
+      return {
+          title: 'WAT',
+          filterString: ''
+      }
+  },
+  ...
+```
+**bad**
+```
+  render: function() {
+      return (
+          <h1> { title.substr(0,20) } </h1>
+          <ul>
+            { this.props.myList.filter(function(item) { return item.matches(this.state.filterString); }).map(function(item) {
+              <li>{ item }</li>
+            })}
+          </ul>
+      );
+  }
+```
+**good**
+```
+  _shortTitle: function() {
+      return title.substr(0,20);
+  },
+  _filteredList: function() {
+      return this.props.myList.filter(function(item) { 
+             return item.matches(this.state.filterString); 
+          });
+  },
+  render: function() {
+      return (
+          <h1>{ _shortTitle() }</h1>
+          <ul>
+            { this._filteredList().map(function(item) {
+              <li>{ item }</li>
+            })}
+          </ul>
+      );
+  }
+```
+
+Derived properties can/should be memoized with an important caveat: Memoization is only practical with immutable objects and arrays. Immutability is recommended in general.
+
+## Binding Event Handlers
+
+When binding functions inside a collection, bind to the key instead of the data object itself. This helps keep logic out of the view.
+
+React will currently override event handler binds to bind to this. This practice will stop in React 13, so you should explicitly bind to this from now on.
+
+Don't use data- and dataset in event handlers/binds. It's terribly slow and non-reacty.
+
+Avoid using the event object in event handlers unless you need something on the event object. If you need to call event.preventDefault(), use a prevent default wrapping utility function.
+
+**bad**
+```
+  ...
+  _doSomething: function(event) {
+      event.preventDefault();
+      var i = event.target.dataset.id;
+      ...
+  },
+  render: function() {
+      return this.props.sections.map(function(section, i) {(
+        <a key={ i } href="#" onClick={ _doSomething } data-id="i">{ section.label }</a>
+      )});
+  }
+
+```
+
+**good**
+```
+  ...
+  _preventDefault: function(handler) {
+      return function(event) {
+          event.preventDefault();
+          handler.call(this, event);
+      };
+  },
+  _doSomething: function(i) {
+      ...
+  },
+  render: function() {
+      return this.props.sections.map(function(section, i) {(
+        <a key={ i } href="#" onClick={ preventDefault( _doSomething.bind(this, i) }>{ section.label }</a>
+      )});
+  }
+
+```
+
+Note: event.stopPropagation could be wrapped similarly. These wrapping functions should probably go into some mixin.
+
+Don't use varargs in event handlers. The event object will get appended to arguments when bind is used.
+
+## Mixins
+
+Mixins provide additional functionality and help keep components DRY. However, they also "hide" code relevant to the component. 
+
+TODO:
 
 ## Credits
 
