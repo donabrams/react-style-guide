@@ -407,6 +407,37 @@ Note: event.stopPropagation could be wrapped similarly. These wrapping functions
 
 Don't use varargs in event handlers. The event object will get appended to arguments when bind is used.
 
+## Setting State
+
+Similar to having a single return in a function increasing readbility, having a single setState in a function is also desirable, preferably at the end of the function.
+
+**bad**
+```
+  ...
+  toggle_something: function() {
+   if (this.state.color === 'RED') {
+     this.setState({color: 'BLUE'});
+   } else {
+     this.setState({color: 'RED'});
+   }
+  }
+```
+
+**good**
+```
+  ...
+  toggle_something: function() {
+    var color;
+    // Yes I know this is a good spot for a ternary, but it's contrived
+    if (this.state.color === 'RED') {
+     color = 'BLUE';
+    } else {
+     color = 'RED';
+    }
+    this.setState({color: color});
+  }
+```
+
 ## Mixins
 
 Mixins provide additional functionality and help keep components DRY. However, they also "hide" code relevant to the component. 
