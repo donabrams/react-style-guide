@@ -228,7 +228,7 @@ return (
 
 ```
 
-It can be useful to keep a consistent suffix on these variables so they are easily identifiable:*
+It can be useful to keep a consistent suffix on these variables so they are easily identifiable:
 
 ```
 optionalButtonElement, optionalFormElement, optionalTabElement
